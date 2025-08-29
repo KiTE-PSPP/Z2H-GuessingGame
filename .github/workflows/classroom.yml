@@ -62,7 +62,7 @@ jobs:
           max-score: 5
 
       # -------------------
-      # Module 3 (3 submodules → distribute 45 marks)
+      # Module 3
       - name: Run test_m3_1.py
         id: test-m3-1
         uses: classroom-resources/autograding-python-grader@v1
@@ -88,17 +88,17 @@ jobs:
           max-score: 15
 
       # -------------------
-      # Module 4 (1 submodule → 10 marks)
-      - name: Run test_m4_1.py
-        id: test-m4-1
+      # Module 4
+      - name: Run test_m4.py
+        id: test-m4
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m4_1.py
+          test-command: pytest -q tests/test_m4.py
           timeout: 20
           max-score: 10
 
       # -------------------
-      # Module 5 (1 submodule → 10 marks)
+      # Module 5
       - name: Run test_m5_1.py
         id: test-m5-1
         uses: classroom-resources/autograding-python-grader@v1
@@ -106,9 +106,24 @@ jobs:
           test-command: pytest -q tests/test_m5_1.py
           timeout: 20
           max-score: 10
+      - name: Run test_m5_2.py
+        id: test-m5-2
+        uses: classroom-resources/autograding-python-grader@v1
+        with:
+          test-command: pytest -q tests/test_m5_2.py
+          timeout: 20
+          max-score: 10
+      - name: Run test_m5_3.py
+        id: test-m5-3
+        uses: classroom-resources/autograding-python-grader@v1
+        with:
+          test-command: pytest -q tests/test_m5_3.py
+          timeout: 20
+          max-score: 10
+
 
       # -------------------
-      # Module 6 (1 submodule → 10 marks)
+      # Module 6
       - name: Run test_m6_1.py
         id: test-m6-1
         uses: classroom-resources/autograding-python-grader@v1
@@ -116,32 +131,26 @@ jobs:
           test-command: pytest -q tests/test_m6_1.py
           timeout: 20
           max-score: 10
+      - name: Run test_m6_2.py
+        id: test-m6-2
+        uses: classroom-resources/autograding-python-grader@v1
+        with:
+          test-command: pytest -q tests/test_m6_2.py
+          timeout: 20
+          max-score: 10
+      - name: Run test_m6_3.py
+        id: test-m6-3
+        uses: classroom-resources/autograding-python-grader@v1
+        with:
+          test-command: pytest -q tests/test_m6_3.py
+          timeout: 20
+          max-score: 10
 
       # -------------------
-      # Reporter (always runs, even if tests fail)
+      # Reporter
       - name: Autograding Reporter
         if: always()
         uses: classroom-resources/autograding-grading-reporter@v1
-        env:
-          TEST-M1-1_RESULTS: "${{steps.test-m1-1.outputs.result}}"
-          TEST-M1-2_RESULTS: "${{steps.test-m1-2.outputs.result}}"
-          TEST-M2-1_RESULTS: "${{steps.test-m2-1.outputs.result}}"
-          TEST-M2-2_RESULTS: "${{steps.test-m2-2.outputs.result}}"
-          TEST-M3-1_RESULTS: "${{steps.test-m3-1.outputs.result}}"
-          TEST-M3-2_RESULTS: "${{steps.test-m3-2.outputs.result}}"
-          TEST-M3-3_RESULTS: "${{steps.test-m3-3.outputs.result}}"
-          TEST-M4-1_RESULTS: "${{steps.test-m4-1.outputs.result}}"
-          TEST-M5-1_RESULTS: "${{steps.test-m5-1.outputs.result}}"
-          TEST-M6-1_RESULTS: "${{steps.test-m6-1.outputs.result}}"
         with:
-          runners: |
-            test-m1-1
-            test-m1-2
-            test-m2-1
-            test-m2-2
-            test-m3-1
-            test-m3-2
-            test-m3-3
-            test-m4-1
-            test-m5-1
-            test-m6-1
+          runners: test-m1-1,test-m1-2,test-m2-1,test-m2-2,test-m3-1,test-m3-2,test-m3-3,test-m4,test-m5-1,test-m5-2,test-m5-3,test-m6-1,test-m6-2,test-m6-3
+          token: ${{ secrets.GITHUB_TOKEN }}
