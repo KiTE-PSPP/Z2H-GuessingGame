@@ -1,0 +1,43 @@
+def while_loop_condition():
+    #Your creative code goes here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#do not edit below this line
+if __name__ == "__main__":
+    while_loop_condition()
