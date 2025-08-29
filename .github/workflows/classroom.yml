@@ -1,128 +1,147 @@
-name: Autograding Tests
+name: Autograding
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+'on':
+  - push
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
 
 jobs:
-  run-tests:
+  run-autograding-tests:
     runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.x'
 
       - name: Install dependencies
         run: pip install pytest
 
-      # Module 1.1 (5 marks)
-      - name: M1_1
+      # -------------------
+      # Module 1
+      - name: Run test_m1_1.py
+        id: test-m1-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m1_1.py || true
+          test-command: pytest -q tests/test_m1_1.py
+          timeout: 20
           max-score: 5
 
-      # Module 1.2 (5 marks)
-      - name: M1_2
+      - name: Run test_m1_2.py
+        id: test-m1-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m1_2.py || true
+          test-command: pytest -q tests/test_m1_2.py
+          timeout: 20
           max-score: 5
 
-      # Module 2.1 (5 marks)
-      - name: M2_1
+      # -------------------
+      # Module 2
+      - name: Run test_m2_1.py
+        id: test-m2-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m2_1.py || true
+          test-command: pytest -q tests/test_m2_1.py
+          timeout: 20
           max-score: 5
 
-      # Module 2.2 (5 marks)
-      - name: M2_2
+      - name: Run test_m2_2.py
+        id: test-m2-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m2_2.py || true
+          test-command: pytest -q tests/test_m2_2.py
+          timeout: 20
           max-score: 5
 
-      # Remaining 8 modules (8 marks each)
-      - name: M3_1
+      # -------------------
+      # Module 3 (3 submodules → distribute 45 marks)
+      - name: Run test_m3_1.py
+        id: test-m3-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m3_1.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m3_1.py
+          timeout: 20
+          max-score: 15
 
-      - name: M3_2
+      - name: Run test_m3_2.py
+        id: test-m3-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m3_2.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m3_2.py
+          timeout: 20
+          max-score: 15
 
-      - name: M3_3
+      - name: Run test_m3_3.py
+        id: test-m3-3
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m3_3.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m3_3.py
+          timeout: 20
+          max-score: 15
 
-      - name: M4
+      # -------------------
+      # Module 4 (1 submodule → 10 marks)
+      - name: Run test_m4_1.py
+        id: test-m4-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m4.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m4_1.py
+          timeout: 20
+          max-score: 10
 
-      - name: M5_1
+      # -------------------
+      # Module 5 (1 submodule → 10 marks)
+      - name: Run test_m5_1.py
+        id: test-m5-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m5_1.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m5_1.py
+          timeout: 20
+          max-score: 10
 
-      - name: M5_2
+      # -------------------
+      # Module 6 (1 submodule → 10 marks)
+      - name: Run test_m6_1.py
+        id: test-m6-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          entryPoint: pytest
-          args: tests/test_m5_2.py || true
-          max-score: 8
+          test-command: pytest -q tests/test_m6_1.py
+          timeout: 20
+          max-score: 10
 
-      - name: M5_3
-        uses: classroom-resources/autograding-python-grader@v1
-        with:
-          entryPoint: pytest
-          args: tests/test_m5_3.py || true
-          max-score: 8
-
-      - name: M6_1
-        uses: classroom-resources/autograding-python-grader@v1
-        with:
-          entryPoint: pytest
-          args: tests/test_m6_1.py || true
-          max-score: 8
-
-      - name: M6_2
-        uses: classroom-resources/autograding-python-grader@v1
-        with:
-          entryPoint: pytest
-          args: tests/test_m6_2.py || true
-          max-score: 8
-
-      - name: M6_3
-        uses: classroom-resources/autograding-python-grader@v1
-        with:
-          entryPoint: pytest
-          args: tests/test_m6_3.py || true
-          max-score: 8
-
+      # -------------------
+      # Reporter (always runs, even if tests fail)
       - name: Autograding Reporter
+        if: always()
         uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST-M1-1_RESULTS: "${{steps.test-m1-1.outputs.result}}"
+          TEST-M1-2_RESULTS: "${{steps.test-m1-2.outputs.result}}"
+          TEST-M2-1_RESULTS: "${{steps.test-m2-1.outputs.result}}"
+          TEST-M2-2_RESULTS: "${{steps.test-m2-2.outputs.result}}"
+          TEST-M3-1_RESULTS: "${{steps.test-m3-1.outputs.result}}"
+          TEST-M3-2_RESULTS: "${{steps.test-m3-2.outputs.result}}"
+          TEST-M3-3_RESULTS: "${{steps.test-m3-3.outputs.result}}"
+          TEST-M4-1_RESULTS: "${{steps.test-m4-1.outputs.result}}"
+          TEST-M5-1_RESULTS: "${{steps.test-m5-1.outputs.result}}"
+          TEST-M6-1_RESULTS: "${{steps.test-m6-1.outputs.result}}"
         with:
-          runners: M1_1,M1_2,M2_1,M2_2,M3_1,M3_2,M3_3,M4,M5_1,M5_2,M5_3,M6_1,M6_2,M6_3
+          runners: |
+            test-m1-1
+            test-m1-2
+            test-m2-1
+            test-m2-2
+            test-m3-1
+            test-m3-2
+            test-m3-3
+            test-m4-1
+            test-m5-1
+            test-m6-1
