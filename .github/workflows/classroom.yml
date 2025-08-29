@@ -1,4 +1,4 @@
-name: Autograding All Modules
+name: Autograding
 
 'on':
   - push
@@ -17,15 +17,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      # Install pytest once globally
+      - name: Install pytest
         run: pip install pytest
 
-      # --- Module 1 ---
+      # ---------------- Module 1 ----------------
       - name: Run tests for m1_1.py
         id: test-m1-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m1_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m1_1.py
           timeout: 20
           max-score: 5
 
@@ -33,16 +34,16 @@ jobs:
         id: test-m1-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m1_2.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m1_2.py
           timeout: 20
           max-score: 5
 
-      # --- Module 2 ---
+      # ---------------- Module 2 ----------------
       - name: Run tests for m2_1.py
         id: test-m2-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m2_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m2_1.py
           timeout: 20
           max-score: 5
 
@@ -50,16 +51,16 @@ jobs:
         id: test-m2-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m2_2.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m2_2.py
           timeout: 20
           max-score: 5
 
-      # --- Module 3 (3 submodules) ---
+      # ---------------- Module 3 ----------------
       - name: Run tests for m3_1.py
         id: test-m3-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m3_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m3_1.py
           timeout: 20
           max-score: 5
 
@@ -67,7 +68,7 @@ jobs:
         id: test-m3-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m3_2.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m3_2.py
           timeout: 20
           max-score: 5
 
@@ -75,25 +76,25 @@ jobs:
         id: test-m3-3
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m3_3.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m3_3.py
           timeout: 20
           max-score: 5
 
-      # --- Module 4 ---
+      # ---------------- Module 4 ----------------
       - name: Run tests for m4_1.py
         id: test-m4-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m4_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m4_1.py
           timeout: 20
           max-score: 5
 
-      # --- Module 5 ---
+      # ---------------- Module 5 ----------------
       - name: Run tests for m5_1.py
         id: test-m5-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m5_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m5_1.py
           timeout: 20
           max-score: 10
 
@@ -101,7 +102,7 @@ jobs:
         id: test-m5-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m5_2.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m5_2.py
           timeout: 20
           max-score: 10
 
@@ -109,16 +110,16 @@ jobs:
         id: test-m5-3
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m5_3.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m5_3.py
           timeout: 20
           max-score: 10
 
-      # --- Module 6 ---
+      # ---------------- Module 6 ----------------
       - name: Run tests for m6_1.py
         id: test-m6-1
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m6_1.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m6_1.py
           timeout: 20
           max-score: 10
 
@@ -126,7 +127,7 @@ jobs:
         id: test-m6-2
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m6_2.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m6_2.py
           timeout: 20
           max-score: 10
 
@@ -134,12 +135,13 @@ jobs:
         id: test-m6-3
         uses: classroom-resources/autograding-python-grader@v1
         with:
-          test-command: pytest -q tests/test_m6_3.py
+          test-command: PYTHONPATH=. pytest -q tests/test_m6_3.py
           timeout: 20
-          max-score: 10   # one extra point to make total = 100
+          max-score: 10
 
-      # --- Reporter (collects all results) ---
+      # ---------------- Reporter ----------------
       - name: Autograding Reporter
+        if: always()   # ensures reporter runs even if tests fail
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
           TEST-M1-1_RESULTS: "${{steps.test-m1-1.outputs.result}}"
